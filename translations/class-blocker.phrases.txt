@@ -1,0 +1,114 @@
+"Phrases"
+{
+    "Prefix"
+    {
+        "en"    "{burlywood}[Class blocker]{default} "
+    }
+
+    "Class blocker"
+    {
+	"en"    "Class blocker"
+    }
+
+    "Select player"
+    {
+	"en"    "Select the player"
+    }
+
+    "Select team"
+    {
+	"en"    "Select the team"
+    }
+
+    "Select class"
+    {
+	"en"    "Select the class"
+    }
+	
+    "Weapon use Allies"
+    {
+	"en"    "Allies: Pick up weapon"
+    }
+
+    "Weapon use Axis"
+    {
+	"en"    "Axis: Pick up weapon"
+    }
+
+    "Allies"
+    {
+	"en"    "Allies"
+    }
+
+    "Axis"
+    {
+	"en"    "Axis"
+    }
+
+    "Enabled"
+    {
+	"en"    "Enabled"
+    }
+
+    "Disabled"
+    {
+        "en"    "Disabled"
+    }
+
+    "Allowed"
+    {
+	"en"    "Allowed"
+    }
+
+    "Forbidden"
+    {
+        "en"    "Forbidden"
+    }
+
+    "Rifleman"
+    {
+	"en"    "Rifleman"
+    }
+
+    "Assault"
+    {
+	"en"    "Assault"
+    }
+
+    "Support"
+    {
+	"en"    "Support"
+    }
+
+    "Sniper"
+    {
+	"en"    "Sniper"
+    }
+
+    "Mg"
+    {
+	"en"    "Mg"
+    }
+
+    "Rocket"
+    {
+	"en"    "Rocket"
+    }
+
+    "Player is no longer available"
+    {
+	"en"    "Player is no longer available"
+    }
+
+    "Class locked"
+    {
+	"#format"	"{1:t},{2:t}"
+	"en"    "Class '{1}' is locked for team '{2}'"
+    }
+
+    "Class unlocked"
+    {
+	"#format"	"{1:t},{2:t}"
+	"en"    "Class '{1}' is unlocked for team '{2}'"
+    }
+}
