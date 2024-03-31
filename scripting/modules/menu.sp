@@ -1,4 +1,38 @@
+static TopMenu g_adminMenu = null;
+static TopMenuObject g_menuClassLocker = INVALID_TOPMENUOBJECT;
+
+static int g_target[MAXPLAYERS + 1];
+static int g_targetClass[MAXPLAYERS + 1];
+
 void AdminMenu_Create() {
+    TopMenu topMenu = GetAdminTopMenu();
+
+    if (LibraryExists("adminmenu") && topMenu != null) {
+        OnAdminMenuReady(topMenu);
+    }
+}
+
+public void OnAdminMenuReady(Handle topMenu) {
+    AdminMenuReady(topMenu);
+}
+
+public void AdminMenuReady(Handle topMenuHandle) {
+    TopMenu topMenu = TopMenu.FromHandle(topMenuHandle);
+
+    if (topMenu == g_adminMenu) {
+        return;
+    }
+
+    g_adminMenu = topMenu;
+
+    AdminMenu_Ready();
+}
+
+void AdminMenu_Destroy() {
+    g_adminMenu = null;
+}
+
+void AdminMenu_Ready() {
     g_menuClassLocker = g_adminMenu.FindCategory(ADMINMENU_PLAYERCOMMANDS);
 
     if (g_menuClassLocker != INVALID_TOPMENUOBJECT) {
@@ -12,12 +46,11 @@ public void AdminMenuHandler_ClassBlock(TopMenu topmenu, TopMenuAction action, T
 		
     } else if (action == TopMenuAction_SelectOption) {
         Menu_PlayersList(param);
-			
     }
 }
 
 void Menu_PlayersList(int client) {
-    Helpers_LoadClassNameIndex(client);
+    Class_LoadIndexName(client);
 
     Menu menu = new Menu(MenuHandler_Settings);
 
@@ -56,9 +89,13 @@ void Menu_SelectClass(int client, int target) {
     Menu menu = new Menu(MenuHandler_SelectClass);
 
     menu.SetTitle("%T", MENU_SELECT_CLASS, client);
+
+    char className[CLASS_NAME_LENGTH];
 	
-    for (int i = 0; i < sizeof(g_className); i++) {
-        Class_AddItem(menu, g_className[i], client);
+    for (int i = 0; i < Class_GetAmount(); i++) {
+        Class_GetName(className, i)
+
+        Class_AddItem(menu, className, client);
     }
 
     g_target[client] = GetClientUserId(target);
@@ -112,11 +149,11 @@ void Menu_SelectTeam(int client, int target, int class) {
     g_alliesWeapons.GetValue(steam, alliesWeapons);
     g_axisWeapons.GetValue(steam, axisWeapons);
 	
-    Team_AddItem(menu, ITEM_ALLIES, client, Settings_IsClassEnable(class, alliesClasses));
-    Team_AddItem(menu, ITEM_AXIS, client, Settings_IsClassEnable(class, axisClasses));
+    Team_AddItem(menu, ITEM_ALLIES, client, Class_IsEnable(class, alliesClasses));
+    Team_AddItem(menu, ITEM_AXIS, client, Class_IsEnable(class, axisClasses));
     menu.AddItem("", "", ITEMDRAW_SPACER);
-    UseWeapon_AddItem(menu, ITEM_WEAPON_USE_ALLIES, client, Settings_IsClassEnable(class, alliesWeapons), Settings_IsClassEnable(class, alliesClasses));
-    UseWeapon_AddItem(menu, ITEM_WEAPON_USE_AXIS, client, Settings_IsClassEnable(class, axisWeapons), Settings_IsClassEnable(class, axisClasses));
+    UseWeapon_AddItem(menu, ITEM_WEAPON_USE_ALLIES, client, Class_IsEnable(class, alliesWeapons), Class_IsEnable(class, alliesClasses));
+    UseWeapon_AddItem(menu, ITEM_WEAPON_USE_AXIS, client, Class_IsEnable(class, axisWeapons), Class_IsEnable(class, axisClasses));
 
     g_targetClass[client] = class;
     g_target[client] = GetClientUserId(target);
@@ -137,11 +174,11 @@ public int MenuHandler_SelectTeam(Menu menu, MenuAction action, int param1, int 
             Menu_PlayersList(param1);
             Message_PlayerNotAvailable(param1);
 
-        } else if (StrEqual(info, g_teamName[Team_Allies])){
+        } else if (StrEqual(info, ITEM_ALLIES)){
             Client_ChangeSettings(target, Team_Allies, classIndex);
             Menu_SelectTeam(param1, target, classIndex);
 			
-        } else if (StrEqual(info, g_teamName[Team_Axis])){
+        } else if (StrEqual(info, ITEM_AXIS)){
             Client_ChangeSettings(target, Team_Axis, classIndex);
             Menu_SelectTeam(param1, target, classIndex);
 			

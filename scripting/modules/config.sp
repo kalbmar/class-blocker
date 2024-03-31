@@ -1,3 +1,5 @@
+static char g_configPlayersPath[PLATFORM_MAX_PATH];
+
 void Config_BuildConfigPath() {
     BuildPath(Path_SM, g_configPlayersPath, sizeof(g_configPlayersPath), "configs/class-blocker");
 
@@ -20,7 +22,6 @@ void Config_ReadPlayerSettings(int client) {
     char playerSettingsPath[PLATFORM_MAX_PATH];
 
     GetClientAuthId(client, AuthId_Steam3, steam, sizeof(steam));
-
     ReplaceString(steam, MAX_AUTHID_LENGTH, CHAR_U_UPPER, CHAR_U_LOWER);
     ReplaceString(steam, sizeof(steam), CHAR_COLON, CHAR_HYPHEN);
     Format(playerSettingsPath, sizeof(playerSettingsPath), "%s/%s.txt", g_configPlayersPath, steam);
@@ -58,11 +59,15 @@ void Config_ReadPlayerSettings(int client) {
 }
 
 void Config_LoadWeaponsUseSettings(int client, int team, int weapons) {
-    for (int i = 0; i < WEAPON_TEAM_AMOUND; i++) {
+    for (int i = 0; i < WEAPON_TEAM_AMOUNT; i++) {
         if (Bit_Check(weapons, i)) {
-            int weaponNameIndex = (team - Team_Allies) * WEAPON_TEAM_AMOUND + i;
+            char weaponName[WEAPON_NAME_LENGTH];
+            int weaponNameIndex;
 
-            g_weaponsClassName[client].SetValue(g_weaponsName[weaponNameIndex], NO_VALUE);
+            weaponNameIndex = (team - Team_Allies) * WEAPON_TEAM_AMOUNT + i;
+            Weapon_GetName(weaponName, weaponNameIndex);
+            
+            g_weaponsClassName[client].SetValue(weaponName, NO_VALUE);
         }
     }
 }

@@ -10,7 +10,7 @@ void UseCase_ClassLock(int target, int team, int class) {
     int currentTeam;
 
     currentClass = Client_GetClass(target);
-    currentTeam = Client_GetTeam(target);
+    currentTeam = GetClientTeam(target);
 
     if (currentTeam == team && currentClass == class) {
         ChangeClientTeam(target, Team_Spectator);

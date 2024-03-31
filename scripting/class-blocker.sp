@@ -1,18 +1,21 @@
 #include <sourcemod>
 #include <sdkhooks>
-#include <morecolors>
-
 #undef REQUIRE_PLUGIN
 #include <adminmenu>
 
-TopMenu g_adminMenu = null;
-TopMenuObject g_menuClassLocker = INVALID_TOPMENUOBJECT;
+#include "morecolors"
 
-#include "constant"
+#include "class-blocker/client"
+#include "class-blocker/config"
+#include "class-blocker/menu"
+#include "class-blocker/class"
+#include "class-blocker/team"
+#include "class-blocker/weapon"
 
-#include "modules/variables.sp"
-#include "modules/helpers.sp"
 #include "modules/client.sp"
+#include "modules/class.sp"
+#include "modules/team.sp"
+#include "modules/weapon.sp"
 #include "modules/event.sp"
 #include "modules/hook.sp"
 #include "modules/bits.sp"
@@ -26,47 +29,23 @@ public Plugin myinfo = {
     name = "Class blocker",
     author = "Kalbmar",
     description = "Personal class blocker for players",
-    version = "0.1.0",
+    version = "0.2.0",
     url = "https://github.com/kalbmar/class-blocker",
 };
 
 public void OnPluginStart() {
-    AdminMenuCreate();
+    AdminMenu_Create();
     Config_BuildConfigPath();
     LoadTranslations("class-blocker.phrases");
-    Helpers_Create();
+    Client_CreateBufferSettings();
     Event_Create();
     Config_PluginReload();
 }
 
 public void OnLibraryRemoved(const char[] name) {
     if (StrEqual(name, "adminmenu")) {
-        g_adminMenu = null;
+        AdminMenu_Destroy();
     }
-}
-
-void AdminMenuCreate() {
-    TopMenu topMenu = GetAdminTopMenu();
-
-    if (LibraryExists("adminmenu") && topMenu != null) {
-        OnAdminMenuReady(topMenu);
-    }
-}
-
-public void OnAdminMenuReady(Handle topMenu) {
-    AdminMenuReady(topMenu);
-}
-
-public void AdminMenuReady(Handle topMenuHandle) {
-    TopMenu topMenu = TopMenu.FromHandle(topMenuHandle);
-
-    if (topMenu == g_adminMenu) {
-        return;
-    }
-
-    g_adminMenu = topMenu;
-
-    AdminMenu_Create();
 }
 
 public void OnClientPostAdminCheck(int client) {
@@ -79,9 +58,10 @@ public void OnClientDisconnect(int client) {
 }
 
 public void OnMapEnd() {
-    Helper_ClearCurrentSettings();
+    Client_ClearCurrentSettings();
 }
 
 public void OnPluginEnd() {
-    Helpers_Delete();
+    Client_DestroySettings();
+    Class_DestroySettings();
 }
