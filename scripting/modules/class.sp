@@ -15,8 +15,8 @@ void Class_LoadIndexName(int client) {
     char className[CLASS_NAME_LENGTH];
 
     for (int i = 0; i < Class_GetAmount(); i++) {
-        Class_GetName(className, i)
-        Format(className, Class_GetAmount(), "%T", className, client);
+        Class_GetName(className, i);
+        Format(className, sizeof(className), "%T", className, client);
 
         g_classNameIndex.SetValue(className, i);
     }

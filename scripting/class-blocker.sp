@@ -29,7 +29,7 @@ public Plugin myinfo = {
     name = "Class blocker",
     author = "Kalbmar",
     description = "Personal class blocker for players",
-    version = "0.2.0",
+    version = "1.0.0",
     url = "https://github.com/kalbmar/class-blocker",
 };
 

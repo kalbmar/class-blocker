@@ -10,7 +10,7 @@ void Config_BuildConfigPath() {
 
 void Config_PluginReload() {
     for (int client = 1; client <= MaxClients; client++) {
-        if (IsClientConnected(client)) {
+        if (IsClientInGame(client)) {
             Config_ReadPlayerSettings(client);
             Client_GetDesiredClass(client);
         }
@@ -35,7 +35,7 @@ void Config_ReadPlayerSettings(int client) {
     int alliesWeapons;
     int axisWeapons;
 
-    KeyValues kv = new KeyValues("Player settings");
+    KeyValues kv = Config_CreateKeyValues();
 
     kv.ImportFromFile(playerSettingsPath);
 
@@ -55,7 +55,7 @@ void Config_ReadPlayerSettings(int client) {
     Config_LoadWeaponsUseSettings(client, Team_Allies, alliesWeapons);
     Config_LoadWeaponsUseSettings(client, Team_Axis, axisWeapons);
  
-    delete kv;
+    Config_DestroyKeyValues(kv);
 }
 
 void Config_LoadWeaponsUseSettings(int client, int team, int weapons) {
@@ -73,7 +73,7 @@ void Config_LoadWeaponsUseSettings(int client, int team, int weapons) {
 }
 
 void Config_SavePlayerSettings(char[] steam) {
-    KeyValues kv = new KeyValues("Player settings");
+    KeyValues kv = Config_CreateKeyValues();
 
     char playerSettingsPath[PLATFORM_MAX_PATH];
     int alliesClasses;
@@ -99,5 +99,15 @@ void Config_SavePlayerSettings(char[] steam) {
     kv.Rewind();
     kv.ExportToFile(playerSettingsPath);
 
+    Config_DestroyKeyValues(kv);
+}
+
+KeyValues Config_CreateKeyValues() {
+    KeyValues kv = new KeyValues("Player settings");
+
+    return kv;
+}
+
+void Config_DestroyKeyValues(KeyValues kv) {
     delete kv;
 }
