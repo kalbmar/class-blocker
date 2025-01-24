@@ -2,7 +2,7 @@
 {
     "Prefix"
     {
-        "en"    "{burlywood}[Class blocker]{default} "
+        "en"    "DEB887[Class blocker] "
     }
 
     "Class blocker"

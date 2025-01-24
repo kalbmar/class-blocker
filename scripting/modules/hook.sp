@@ -11,7 +11,7 @@ public Action Hook_WeaponCanUse(int client, int weapon) {
 	
     GetEntityClassname(weapon, weaponName, sizeof(weaponName));
 
-    if (!g_weaponsClassName[client].ContainsKey(weaponName)) {
+    if (!Client_IsWeaponsEnabled(client, weaponName)) {
         return Plugin_Continue;
     }
 

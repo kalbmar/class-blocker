@@ -6,3 +6,5 @@
 #define CLIENT_MESSAGE_SHOW_YES true
 #define CLIENT_MESSAGE_SHOW_NO false
 #define CLIENT_NOT_FOUND 0
+#define CLIENT_HOOK_ACTIVE_YES true
+#define CLIENT_HOOK_ACTIVE_NO false

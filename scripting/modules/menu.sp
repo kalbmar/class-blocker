@@ -111,7 +111,8 @@ public int MenuHandler_SelectClass(Menu menu, MenuAction action, int param1, int
         char info[ITEM_LENGTH];
 
         menu.GetItem(param2, info, sizeof(info));
-        g_classNameIndex.GetValue(info, classIndex);
+
+        classIndex = Class_GetValue(info);
 
         if (target == CLIENT_NOT_FOUND) {
             Menu_PlayersList(param1);
@@ -144,10 +145,10 @@ void Menu_SelectTeam(int client, int target, int class) {
 
     GetClientAuthId(target, AuthId_Steam3, steam, sizeof(steam));
 
-    g_alliesClasses.GetValue(steam, alliesClasses);
-    g_axisClasses.GetValue(steam, axisClasses);
-    g_alliesWeapons.GetValue(steam, alliesWeapons);
-    g_axisWeapons.GetValue(steam, axisWeapons);
+    alliesClasses = Client_GetAlliesClasses(steam);
+    axisClasses = Client_GetAxisClasses(steam);
+    alliesWeapons = Client_GetAlliesWeapons(steam);
+    axisWeapons = Client_GetAxisWeapons(steam);
 	
     Team_AddItem(menu, ITEM_ALLIES, client, Class_IsEnable(class, alliesClasses));
     Team_AddItem(menu, ITEM_AXIS, client, Class_IsEnable(class, axisClasses));

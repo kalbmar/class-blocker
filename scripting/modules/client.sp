@@ -1,8 +1,8 @@
-StringMap g_alliesClasses;
-StringMap g_axisClasses;
-StringMap g_alliesWeapons;
-StringMap g_axisWeapons;
-StringMap g_weaponsClassName[MAXPLAYERS + 1];
+static StringMap g_alliesClasses;
+static StringMap g_axisClasses;
+static StringMap g_alliesWeapons;
+static StringMap g_axisWeapons;
+static StringMap g_weaponsClassName[MAXPLAYERS + 1];
 
 void Client_CreateBufferSettings() {
     g_alliesClasses = new StringMap();
@@ -99,6 +99,22 @@ void Client_ClearCurrentSettings() {
     g_axisWeapons.Clear();
 }
 
+bool Client_IsWeaponsEnabled(int client, const char[] className) {
+    return g_weaponsClassName[client].ContainsKey(className);
+}
+
+void Client_SetWeaponsSettings(int client, const char[] className) {
+    g_weaponsClassName[client].SetValue(className, NO_VALUE);
+}
+
+void Client_ClearWeaponClassName(int client) {
+    g_weaponsClassName[client].Clear();
+}
+
+void Client_RemoveWeaponClassName(int client, const char[] className) {
+    g_weaponsClassName[client].Remove(className);
+}
+
 void Client_DestroySettings() {
     delete g_alliesClasses;
     delete g_axisClasses;
@@ -108,4 +124,52 @@ void Client_DestroySettings() {
     for (int i = 1; i <= MaxClients; i++) {
         delete g_weaponsClassName[i];
     }
+}
+
+int Client_GetAlliesClasses(const char[] steam) {
+    int classes;
+
+    g_alliesClasses.GetValue(steam, classes);
+
+    return classes;
+}
+
+int Client_GetAxisClasses(const char[] steam) {
+    int classes;
+
+    g_axisClasses.GetValue(steam, classes);
+
+    return classes;
+}
+
+int Client_GetAlliesWeapons(const char[] steam) {
+    int weapons;
+
+    g_alliesWeapons.GetValue(steam, weapons);
+
+    return weapons;
+}
+
+int Client_GetAxisWeapons(const char[] steam) {
+    int weapons;
+
+    g_axisWeapons.GetValue(steam, weapons);
+
+    return weapons;
+}
+
+void Client_SetAlliesClasses(const char[] steam, int classes) {
+    g_alliesClasses.SetValue(steam, classes);
+}
+
+void Client_SetAxisClasses(const char[] steam, int classes) {
+    g_axisClasses.SetValue(steam, classes);
+}
+
+void Client_SetAlliesWeapons(const char[] steam, int weapons) {
+    g_alliesWeapons.SetValue(steam, weapons);
+}
+
+void Client_SetAxisWeapons(const char[] steam, int weapons) {
+    g_axisWeapons.SetValue(steam, weapons);
 }

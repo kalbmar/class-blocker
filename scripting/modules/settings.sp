@@ -7,7 +7,7 @@ int Settings_WeaponsRemove(int target, int team, int class, int classes, int wea
         weapons = Bit_Remove(weapons, class);
         Weapon_GetName(weaponName, weaponNameIndex);
         
-        g_weaponsClassName[target].Remove(weaponName);
+        Client_RemoveWeaponClassName(target, weaponName);
     }
 
     return weapons;
@@ -21,10 +21,10 @@ void Settings_WeaponsEnable(int target, int team, int class, int weapons) {
     Weapon_GetName(weaponName, weaponNameIndex);
 		
     if (Class_IsEnable(class, weapons)) {
-        g_weaponsClassName[target].SetValue(weaponName, NO_VALUE);
+        Client_SetWeaponsSettings(target, weaponName);
 		
     } else {
-        g_weaponsClassName[target].Remove(weaponName);
+        Client_RemoveWeaponClassName(target, weaponName);
     }
 }
 

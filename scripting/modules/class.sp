@@ -1,4 +1,4 @@
-StringMap g_classNameIndex;
+static StringMap g_classNameIndex;
 
 static char g_className[][] = {
     "Rifleman",
@@ -32,11 +32,11 @@ void Class_AllDisabledAllies(char[] steam, int target, int team, int alliesClass
         alliesWeapons = Bit_Remove(alliesWeapons, CLASS_ASSAULT);
         Weapon_GetName(weaponName, weaponNameIndex);
 
-        g_weaponsClassName[target].Remove(weaponName);
+        Client_RemoveWeaponClassName(target, weaponName);
     }
 
-    g_alliesClasses.SetValue(steam, alliesClasses);
-    g_alliesWeapons.SetValue(steam, alliesWeapons);
+    Client_SetAlliesClasses(steam, alliesClasses);
+    Client_SetAlliesWeapons(steam, alliesWeapons);
 
     Config_SavePlayerSettings(steam);
 }
@@ -51,13 +51,21 @@ void Class_AllDisabledAxis(char[] steam, int target, int team, int axisClasses, 
         axisWeapons = Bit_Remove(axisWeapons, CLASS_ASSAULT);
         Weapon_GetName(weaponName, weaponNameIndex);
 
-        g_weaponsClassName[target].Remove(weaponName);
+        Client_RemoveWeaponClassName(target, weaponName);
     }
 
-    g_axisClasses.SetValue(steam, axisClasses);
-    g_axisWeapons.SetValue(steam, axisWeapons);
+    Client_SetAxisClasses(steam, axisClasses);
+    Client_SetAxisWeapons(steam, axisWeapons);
 
     Config_SavePlayerSettings(steam);
+}
+
+int Class_GetValue(const char[] key) {
+    int value;
+
+    g_classNameIndex.GetValue(key, value);
+
+    return value;
 }
 
 void Class_GetName(char[] className, int index) {

@@ -3,8 +3,6 @@
 #undef REQUIRE_PLUGIN
 #include <adminmenu>
 
-#include "morecolors"
-
 #include "class-blocker/client"
 #include "class-blocker/config"
 #include "class-blocker/menu"
@@ -29,7 +27,7 @@ public Plugin myinfo = {
     name = "Class blocker",
     author = "Kalbmar",
     description = "Personal class blocker for players",
-    version = "1.0.0",
+    version = "1.0.1",
     url = "https://github.com/kalbmar/class-blocker",
 };
 
@@ -49,12 +47,12 @@ public void OnLibraryRemoved(const char[] name) {
 }
 
 public void OnClientPostAdminCheck(int client) {
-    Config_ReadPlayerSettings(client);
+    Config_ReadPlayerSettings(client, CLIENT_HOOK_ACTIVE_YES);
     Hook_Create(client);
 }
 
 public void OnClientDisconnect(int client) {
-    g_weaponsClassName[client].Clear();
+    Client_ClearWeaponClassName(client);
 }
 
 public void OnMapEnd() {

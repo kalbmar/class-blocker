@@ -5,7 +5,7 @@ void Message_ClassLock(int client, int team, int class) {
     Class_GetName(className, class);
     Team_GetName(teamName, team);
     PrintHintText(client, "%t", "Class locked", className, teamName);
-    CPrintToChat(client, "%t%t", "Prefix", "Class locked", className, teamName);
+    PrintToChat(client, "%t%t", "Prefix", "Class locked", className, teamName);
 }
 
 void Message_ClassUnlock(int client, int team, int class) {
@@ -14,9 +14,9 @@ void Message_ClassUnlock(int client, int team, int class) {
 
     Class_GetName(className, class);
     Team_GetName(teamName, team);
-    CPrintToChat(client, "%t%t", "Prefix", "Class unlocked", className, teamName);
+    PrintToChat(client, "%t%t", "Prefix", "Class unlocked", className, teamName);
 }
 
 void Message_PlayerNotAvailable(int client) {
-    CPrintToChat(client, "%t%t", "Prefix", "Player is no longer available");
+    PrintToChat(client, "%t%t", "Prefix", "Player is no longer available");
 }

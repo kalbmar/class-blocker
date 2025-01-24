@@ -11,13 +11,17 @@ void Config_BuildConfigPath() {
 void Config_PluginReload() {
     for (int client = 1; client <= MaxClients; client++) {
         if (IsClientInGame(client)) {
-            Config_ReadPlayerSettings(client);
+            Config_ReadPlayerSettings(client, CLIENT_HOOK_ACTIVE_NO);
             Client_GetDesiredClass(client);
         }
     }
 }
 
-void Config_ReadPlayerSettings(int client) {
+void Config_ReadPlayerSettings(int client, bool isHookActive) {
+    if (!isHookActive) {
+        SDKHook(client, SDKHook_WeaponCanUse, Hook_WeaponCanUse);
+    }
+
     char steam[MAX_AUTHID_LENGTH];
     char playerSettingsPath[PLATFORM_MAX_PATH];
 
@@ -47,10 +51,10 @@ void Config_ReadPlayerSettings(int client) {
     ReplaceString(steam, sizeof(steam), CHAR_U_LOWER, CHAR_U_UPPER);
     ReplaceString(steam, sizeof(steam), CHAR_HYPHEN, CHAR_COLON);
 
-    g_alliesClasses.SetValue(steam, alliesClasses);
-    g_axisClasses.SetValue(steam, axisClasses);
-    g_alliesWeapons.SetValue(steam, alliesWeapons);
-    g_axisWeapons.SetValue(steam, axisWeapons);
+    Client_SetAlliesClasses(steam, alliesClasses);
+    Client_SetAxisClasses(steam, axisClasses);
+    Client_SetAlliesWeapons(steam, alliesWeapons);
+    Client_SetAxisWeapons(steam, axisWeapons);
 
     Config_LoadWeaponsUseSettings(client, Team_Allies, alliesWeapons);
     Config_LoadWeaponsUseSettings(client, Team_Axis, axisWeapons);
@@ -67,7 +71,7 @@ void Config_LoadWeaponsUseSettings(int client, int team, int weapons) {
             weaponNameIndex = (team - Team_Allies) * WEAPON_TEAM_AMOUNT + i;
             Weapon_GetName(weaponName, weaponNameIndex);
             
-            g_weaponsClassName[client].SetValue(weaponName, NO_VALUE);
+            Client_SetWeaponsSettings(client, weaponName);
         }
     }
 }
@@ -81,10 +85,10 @@ void Config_SavePlayerSettings(char[] steam) {
     int alliesWeapons;
     int axisWeapons;
 
-    g_alliesClasses.GetValue(steam, alliesClasses);
-    g_axisClasses.GetValue(steam, axisClasses);
-    g_alliesWeapons.GetValue(steam, alliesWeapons);
-    g_axisWeapons.GetValue(steam, axisWeapons);
+    alliesClasses = Client_GetAlliesClasses(steam);
+    axisClasses = Client_GetAxisClasses(steam);
+    alliesWeapons = Client_GetAlliesWeapons(steam);
+    axisWeapons = Client_GetAxisWeapons(steam);
 
     ReplaceString(steam, MAX_AUTHID_LENGTH, CHAR_U_UPPER, CHAR_U_LOWER);
     ReplaceString(steam, MAX_AUTHID_LENGTH, CHAR_COLON, CHAR_HYPHEN);
