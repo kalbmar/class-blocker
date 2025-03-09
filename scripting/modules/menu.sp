@@ -204,7 +204,7 @@ public int MenuHandler_SelectTeam(Menu menu, MenuAction action, int param1, int 
 
 void PlayersList_AddItem(Menu menu) {
     for (int client = 1; client <= MaxClients; client++) {
-        if (IsClientInGame(client)) {
+        if (IsClientInGame(client) && !IsFakeClient(client)) {
             int userId = GetClientUserId(client);
             char number[ITEM_LENGTH];
             char name[PLAYER_NAME_LENGTH];
